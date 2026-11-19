@@ -25,7 +25,7 @@ jobs:
         shell: bash
         run: |
           az account get-access-token \
-          --scope api://407533de-29ff-412d-92ce-4e5123edc076/.default \
+          --scope api://e159c4d0-339c-4c5d-b1f4-1221dca79e92/.default \
             --query accessToken \
             -o tsv > token.txt
 
