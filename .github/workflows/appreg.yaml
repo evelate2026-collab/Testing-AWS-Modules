@@ -22,9 +22,9 @@ jobs:
       - name: Create App Registration
         run: |
           az ad app create \
-            --display-name "GitHubActions-Test-App"
+            --display-name "GitHubActions-Temi"
 
       - name: List App
         run: |
           az ad app list \
-            --display-name "GitHubActions-Test-App"
+            --display-name "GitHubActions-Temi"
