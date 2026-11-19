@@ -1,0 +1,99 @@
+name: OIDC Debug
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  oidc-debug:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Display GitHub OIDC Token
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const core = require('@actions/core');
+
+            const token = await core.getIDToken();
+
+            console.log("=== GITHUB OIDC TOKEN ===");
+            console.log(token);
+
+            const payload = JSON.parse(
+              Buffer.from(
+                token.split('.')[1],
+                'base64url'
+              ).toString()
+            );
+
+            console.log("=== GITHUB OIDC CLAIMS ===");
+            console.log(JSON.stringify(payload, null, 2));
+
+      - name: Azure Login Using OIDC
+        uses: azure/login@v2
+        with:
+          client-id: 407533de-29ff-412d-92ce-4e5123edc076
+          tenant-id: 4f29a05d-a3a4-4149-933d-46174b55c69b
+          allow-no-subscriptions: true
+
+      - name: Get Azure Access Token
+        shell: bash
+        run: |
+          az account get-access-token \
+            --query accessToken \
+            -o tsv > token.txt
+
+          echo "TOKEN_LENGTH=$(wc -c < token.txt)"
+          echo "Azure token captured"
+
+      - name: Decode Azure Access Token
+        shell: pwsh
+        run: |
+
+          $token = Get-Content token.txt -Raw
+
+          Write-Host ""
+          Write-Host "=== AZURE ACCESS TOKEN ==="
+          Write-Host ""
+          Write-Host $token
+
+          $parts = $token.Split('.')
+
+          $payload = $parts[1]
+
+          switch ($payload.Length % 4) {
+            2 { $payload += "==" }
+            3 { $payload += "=" }
+          }
+
+          $json = [System.Text.Encoding]::UTF8.GetString(
+            [System.Convert]::FromBase64String(
+              $payload.Replace('-', '+').Replace('_', '/')
+            )
+          )
+
+          Write-Host ""
+          Write-Host "=== AZURE TOKEN CLAIMS ==="
+          Write-Host ""
+
+          $json
+
+      - name: Display Azure Identity
+        shell: bash
+        run: |
+          az account show || true
+
+      - name: Display Signed In Principal
+        shell: bash
+        run: |
+          az ad sp show \
+            --id 407533de-29ff-412d-92ce-4e5123edc076 || true
