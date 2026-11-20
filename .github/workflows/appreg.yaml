@@ -21,8 +21,8 @@ jobs:
           
       - name: Export App Registration Details     
         env:
-         APP1_ID: ${{ vars.APP1_ID }}
-         APP2_ID: ${{ vars.APP2_ID }}
+         APP1_ID: test
+         APP2_ID: GitHubActions-Temi
         run: |
          az ad app show --id "$APP1_ID" \
          --query "{displayName:displayName,appId:appId,requiredResourceAccess:requiredResourceAccess}" \
