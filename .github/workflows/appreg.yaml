@@ -21,14 +21,14 @@ jobs:
           
       - name: Export App Registration Details     
         env:
-         APP1_ID: test
-         APP2_ID: GitHubActions-Temi
+         APP1_ID: 407533de-29ff-412d-92ce-4e5123edc076
+         APP2_ID: c1f7911b-db5b-44a4-9ca7-d1d2e587a515
         run: |
-         az ad app show --id "test" \
+         az ad app show --id "407533de-29ff-412d-92ce-4e5123edc076" \
          --query "{displayName:displayName,appId:appId,requiredResourceAccess:requiredResourceAccess}" \
          --output json > app1.json
 
-         az ad app show --id "GitHubActions-Temi" \
+         az ad app show --id "c1f7911b-db5b-44a4-9ca7-d1d2e587a515" \
          --query "{displayName:displayName,appId:appId,requiredResourceAccess:requiredResourceAccess}" \
          --output json > app2.json
 
