@@ -33,7 +33,8 @@ jobs:
          --output json > app2.json
 
          echo "==== API PERMISSION DIFFERENCES ===="
-         diff app1.json app2.json || true
+         cat app1.json \
+         cat app2.json 
          
       - name: Create App Registration
         run: |
