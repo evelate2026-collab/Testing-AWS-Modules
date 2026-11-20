@@ -1,0 +1,30 @@
+name: Test App Registration Creation-v1
+
+on:
+  push:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: 407533de-29ff-412d-92ce-4e5123edc076
+          tenant-id: 4f29a05d-a3a4-4149-933d-46174b55c69b
+          allow-no-subscriptions: true
+
+      - name: Create App Registration
+        run: |
+          az ad app create \
+            --display-name "GitHubActions-Test-App"
+
+      - name: List App
+        run: |
+          az ad app list \
+            --display-name "GitHubActions-Test-App"
