@@ -18,7 +18,23 @@ jobs:
           client-id: c1f7911b-db5b-44a4-9ca7-d1d2e587a515 #407533de-29ff-412d-92ce-4e5123edc076
           tenant-id: 4f29a05d-a3a4-4149-933d-46174b55c69b #4f29a05d-a3a4-4149-933d-46174b55c69b
           allow-no-subscriptions: true
+          
+      - name: Export App Registration Details     
+        env:
+         APP1_ID: ${{ vars.APP1_ID }}
+         APP2_ID: ${{ vars.APP2_ID }}
+        run: |
+         az ad app show --id "$APP1_ID" \
+         --query "{displayName:displayName,appId:appId,requiredResourceAccess:requiredResourceAccess}" \
+         --output json > app1.json
 
+         az ad app show --id "$APP2_ID" \
+         --query "{displayName:displayName,appId:appId,requiredResourceAccess:requiredResourceAccess}" \
+         --output json > app2.json
+
+         echo "==== API PERMISSION DIFFERENCES ===="
+         diff app1.json app2.json || true
+         
       - name: Create App Registration
         run: |
           az ad app create \
