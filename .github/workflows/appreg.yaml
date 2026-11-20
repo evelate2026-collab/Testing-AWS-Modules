@@ -1,7 +1,7 @@
 name: Test App Registration Creation
 
 on:
-  workflow_dispatch:
+  push:
 
 permissions:
   id-token: write
@@ -24,11 +24,11 @@ jobs:
          APP1_ID: test
          APP2_ID: GitHubActions-Temi
         run: |
-         az ad app show --id "$APP1_ID" \
+         az ad app show --id "test" \
          --query "{displayName:displayName,appId:appId,requiredResourceAccess:requiredResourceAccess}" \
          --output json > app1.json
 
-         az ad app show --id "$APP2_ID" \
+         az ad app show --id "GitHubActions-Temi" \
          --query "{displayName:displayName,appId:appId,requiredResourceAccess:requiredResourceAccess}" \
          --output json > app2.json
 
