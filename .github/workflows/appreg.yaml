@@ -32,8 +32,11 @@ jobs:
          --query requiredResourceAccess \
          --output json > app2.json
 
-         echo "==== API PERMISSION DIFFERENCES ===="
-         cat app1.json \
+         echo "==== APP1===="
+         cat app1.json 
+
+         echo ""
+         echo "==== APP2===="
          cat app2.json 
          
       - name: Create App Registration
